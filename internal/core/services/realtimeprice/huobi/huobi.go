@@ -4,6 +4,7 @@ import (
 	"coinstrove/consts"
 	"coinstrove/internal/core/domain"
 	"coinstrove/internal/core/ports"
+	"coinstrove/internal/core/services"
 )
 
 type newHuobiService struct {
@@ -29,6 +30,8 @@ func (huobi *newHuobiService) GetThePrice() {
 
 func (huobi *newHuobiService) BroadCast() {
 	huobi.broadcastHandler.BroadCast(huobi.data)
+	services.Rates = append(services.Rates, huobi.data)
+
 }
 
 func (huobi *newHuobiService) WriteToQue() {

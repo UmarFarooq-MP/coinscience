@@ -1,23 +1,24 @@
 package websocket
 
 import (
-	"coinstrove/internal/core/domain"
 	"encoding/json"
-	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
 	"sync"
+
+	"coinstrove/internal/core/domain"
+	"coinstrove/internal/core/services"
+
+	"github.com/gorilla/websocket"
 )
 
-var (
-	websocketUpGrader = websocket.Upgrader{
-		WriteBufferSize: 2048,
-		CheckOrigin:     func(r *http.Request) bool { return true },
-	}
-)
+var websocketUpGrader = websocket.Upgrader{
+	WriteBufferSize: 2048,
+	CheckOrigin:     func(r *http.Request) bool { return true },
+}
 
 type Handler struct {
-	//broadcastService ports.BroadCastService
+	// broadcastService ports.BroadCastService
 	clients ClientList
 	sync.RWMutex
 }
@@ -64,4 +65,29 @@ func (h *Handler) removeClient(client *Client) {
 		client.connection.Close()
 		delete(h.clients, client)
 	}
+}
+
+func (h *Handler) CheapestPrice(w http.ResponseWriter, r *http.Request) {
+	param1 := r.URL.Query().Get("coin_name")
+	if param1 == "" {
+		http.Error(w, "coin_name is required", http.StatusBadRequest)
+		return
+	}
+
+	services.UpdateCheapestRates()
+
+	cheapestRates := services.GetCheapestRatesCache()
+	if cheapestRates == nil {
+		http.Error(w, "No data available", http.StatusNotFound)
+		return
+	}
+
+	if rate, ok := cheapestRates[param1]; ok {
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(rate)
+		return
+	}
+
+	http.Error(w, "No data available", http.StatusNotFound)
+	return
 }

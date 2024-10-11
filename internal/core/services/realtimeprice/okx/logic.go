@@ -4,6 +4,7 @@ import (
 	"coinstrove/consts"
 	"coinstrove/internal/core/domain"
 	"coinstrove/internal/core/ports"
+	"coinstrove/internal/core/services"
 )
 
 type newOkxService struct {
@@ -29,6 +30,8 @@ func (okx *newOkxService) GetThePrice() {
 
 func (okx *newOkxService) BroadCast() {
 	okx.broadcastHandler.BroadCast(okx.data)
+	services.Rates = append(services.Rates, okx.data)
+
 }
 
 func (okx *newOkxService) WriteToQue() {

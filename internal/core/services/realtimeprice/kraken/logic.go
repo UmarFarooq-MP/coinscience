@@ -4,6 +4,7 @@ import (
 	"coinstrove/consts"
 	"coinstrove/internal/core/domain"
 	"coinstrove/internal/core/ports"
+	"coinstrove/internal/core/services"
 )
 
 type newKrakenService struct {
@@ -29,6 +30,8 @@ func (kraken *newKrakenService) GetThePrice() {
 
 func (kraken *newKrakenService) BroadCast() {
 	kraken.broadcastHandler.BroadCast(kraken.data)
+	services.Rates = append(services.Rates, kraken.data)
+
 }
 
 func (kraken *newKrakenService) WriteToQue() {
