@@ -4,6 +4,7 @@ import (
 	"coinstrove/consts"
 	"coinstrove/internal/core/domain"
 	"coinstrove/internal/core/ports"
+	"coinstrove/internal/core/services"
 )
 
 type newBitPayService struct {
@@ -29,6 +30,8 @@ func (bitpay *newBitPayService) GetThePrice() {
 
 func (bitpay *newBitPayService) BroadCast() {
 	bitpay.broadcastHandler.BroadCast(bitpay.data)
+	services.Rates = append(services.Rates, bitpay.data)
+
 }
 
 func (bitpay *newBitPayService) WriteToQue() {

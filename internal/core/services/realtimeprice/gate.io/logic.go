@@ -4,6 +4,7 @@ import (
 	"coinstrove/consts"
 	"coinstrove/internal/core/domain"
 	"coinstrove/internal/core/ports"
+	"coinstrove/internal/core/services"
 )
 
 type newGateIOService struct {
@@ -29,6 +30,8 @@ func (gateio *newGateIOService) GetThePrice() {
 
 func (gateio *newGateIOService) BroadCast() {
 	gateio.broadcastHandler.BroadCast(gateio.data)
+	services.Rates = append(services.Rates, gateio.data)
+
 }
 
 func (gateio *newGateIOService) WriteToQue() {
