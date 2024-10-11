@@ -4,6 +4,7 @@ import (
 	"coinstrove/consts"
 	"coinstrove/internal/core/domain"
 	"coinstrove/internal/core/ports"
+	"coinstrove/internal/core/services"
 )
 
 type newBinanceService struct {
@@ -29,6 +30,8 @@ func (binance *newBinanceService) GetThePrice() {
 
 func (binance *newBinanceService) BroadCast() {
 	binance.broadcastHandler.BroadCast(binance.data)
+	rates := services.GetRatesCache()
+	rates[binance.data.Data.ExchangeName] = binance.data
 }
 
 func (binance *newBinanceService) WriteToQue() {

@@ -4,6 +4,7 @@ import (
 	"coinstrove/consts"
 	"coinstrove/internal/core/domain"
 	"coinstrove/internal/core/ports"
+	"coinstrove/internal/core/services"
 )
 
 type newBitfinexService struct {
@@ -29,6 +30,8 @@ func (bitfinex *newBitfinexService) GetThePrice() {
 
 func (bitfinex *newBitfinexService) BroadCast() {
 	bitfinex.broadcastHandler.BroadCast(bitfinex.data)
+	services.Rates = append(services.Rates, bitfinex.data)
+
 }
 
 func (bitfinex *newBitfinexService) WriteToQue() {

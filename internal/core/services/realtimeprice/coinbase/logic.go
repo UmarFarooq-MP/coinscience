@@ -4,6 +4,7 @@ import (
 	"coinstrove/consts"
 	"coinstrove/internal/core/domain"
 	"coinstrove/internal/core/ports"
+	"coinstrove/internal/core/services"
 )
 
 type newCoinBaseService struct {
@@ -29,6 +30,8 @@ func (coinbase *newCoinBaseService) GetThePrice() {
 
 func (coinbase *newCoinBaseService) BroadCast() {
 	coinbase.broadcastHandler.BroadCast(coinbase.data)
+	services.Rates = append(services.Rates, coinbase.data)
+
 }
 
 func (coinbase *newCoinBaseService) WriteToQue() {

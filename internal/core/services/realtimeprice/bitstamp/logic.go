@@ -4,6 +4,7 @@ import (
 	"coinstrove/consts"
 	"coinstrove/internal/core/domain"
 	"coinstrove/internal/core/ports"
+	"coinstrove/internal/core/services"
 )
 
 type newBitstampService struct {
@@ -29,6 +30,8 @@ func (bitstamp *newBitstampService) GetThePrice() {
 
 func (bitstamp *newBitstampService) BroadCast() {
 	bitstamp.broadcastHandler.BroadCast(bitstamp.data)
+	services.Rates = append(services.Rates, bitstamp.data)
+
 }
 
 func (bitstamp *newBitstampService) WriteToQue() {

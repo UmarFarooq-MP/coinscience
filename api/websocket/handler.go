@@ -65,3 +65,10 @@ func (h *Handler) removeClient(client *Client) {
 		delete(h.clients, client)
 	}
 }
+
+func (h *Handler) CheapestPrice(w http.ResponseWriter, r *http.Request) {
+	param1 := r.URL.Query().Get("coin_name")
+	if param1 != "" {
+
+	}
+}
